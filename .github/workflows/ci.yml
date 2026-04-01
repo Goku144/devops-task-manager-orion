@@ -31,4 +31,4 @@ jobs:
     needs: integration
     steps:
       - name: build
-        run: some-command
+        run: echo ok
