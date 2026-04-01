@@ -1,0 +1,23 @@
+name: CI Pipline
+
+on:
+  watch:
+
+jobs:
+  log-start-event:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 20.19.2
+
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Run Tests
+        run: npm test      
