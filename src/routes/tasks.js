@@ -12,10 +12,10 @@ const Task = mongoose.model('Task', taskSchema);
 
 // 2. Your Default Initial Values
 const defaultTasks = [
-  { title: "Initial task", completed: true },
-  { title: "Install Git and Node.js", completed: true },
-  { title: "Learn DevOps basics", completed: false },
-  { title: "Mergine the first time", completed: true }
+  { id: "1", title: "Initial task", completed: true },
+  { id: "2", title: "Install Git and Node.js", completed: true },
+  { id: "3", title: "Learn DevOps basics", completed: false },
+  { id: "4", title: "Mergine the first time", completed: true }
 ];
 
 // 3. Seeding function (Called by app.js)
@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
       res.status(201).json(newTasks);
     } else {
       const newTask = new Task({
+        id: Task.length + 1,
         title: req.body.title,
         completed: req.body.completed || false
       });
