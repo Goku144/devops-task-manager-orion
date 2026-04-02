@@ -30,4 +30,4 @@ jobs:
 
     steps:
       - name: build
-        run: docker build -t task-manager-api
+        run: docker build -t task-manager-api .
