@@ -41,5 +41,5 @@ jobs:
           context: .
           push: true
           tags: |
-              ghcr.io/goku144/tasks-managet-api:latest
-              ghcr.io/goku144/tasks-managet-api:prod
+              ghcr.io/goku144/tasks-manager-api:latest
+              ghcr.io/goku144/tasks-manager-api:prod
