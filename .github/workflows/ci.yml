@@ -24,10 +24,6 @@ jobs:
       
       - name: Run Tests
         run: npm test      
-  deploy:
-    runs-on: ubuntu-latest
-    needs: integration
-
-    steps:
+        
       - name: build
         run: docker build -t task-manager-api .
