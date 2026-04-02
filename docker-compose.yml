@@ -1,0 +1,16 @@
+services:
+  api:
+    image: ghcr.io/goku144/task-manager-api:prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_URL=mongodb://db:27017/tasksdb
+  db:
+    image: mongo:6
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
