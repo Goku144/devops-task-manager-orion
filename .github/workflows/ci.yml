@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
 jobs:
   integration:
     runs-on: ubuntu-latest
@@ -23,7 +26,20 @@ jobs:
         run: npm ci
       
       - name: Run Tests
-        run: npm test      
+        run: npm test
+      
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }} 
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t task-manager-api .
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+              ghcr.io/goku144/tasks-managet-api:latest
+              ghcr.io/goku144/tasks-managet-api:prod
