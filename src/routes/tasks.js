@@ -6,7 +6,8 @@ const router = express.Router();
 const taskSchema = new mongoose.Schema({
   _id: { type: Number }, // This lets us manually set 1, 2, 3...
   title: { type: String, required: true },
-  completed: { type: Boolean, default: false }
+  completed: { type: Boolean, default: false } , 
+  versionKey: false
 });
 
 const Task = mongoose.model('Task', taskSchema);
