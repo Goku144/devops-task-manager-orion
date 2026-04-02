@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/goku144/task-manager-api:prod
+    image: ghcr.io/goku144/tasks-manager-api:prod
     ports:
       - "3000:3000"
     depends_on:
