@@ -2,23 +2,23 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 
-// 1. Schema Definition
+// 1. Updated Schema to use Number for _id
 const taskSchema = new mongoose.Schema({
+  _id: { type: Number }, // This lets us manually set 1, 2, 3...
   title: { type: String, required: true },
   completed: { type: Boolean, default: false }
 });
 
 const Task = mongoose.model('Task', taskSchema);
 
-// 2. Your Default Initial Values
+// 2. Default Initial Values (Now with _id)
 const defaultTasks = [
-  { id: "1", title: "Initial task", completed: true },
-  { id: "2", title: "Install Git and Node.js", completed: true },
-  { id: "3", title: "Learn DevOps basics", completed: false },
-  { id: "4", title: "Mergine the first time", completed: true }
+  { _id: 1, title: "Initial task", completed: true },
+  { _id: 2, title: "Install Git and Node.js", completed: true },
+  { _id: 3, title: "Learn DevOps basics", completed: false },
+  { _id: 4, title: "Mergine the first time", completed: true }
 ];
 
-// 3. Seeding function (Called by app.js)
 const seedDatabase = async () => {
   try {
     const count = await Task.countDocuments();
@@ -31,7 +31,6 @@ const seedDatabase = async () => {
   }
 };
 
-// 4. GET Route
 router.get('/', async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -41,15 +40,23 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 5. POST Route (Supports single task or array)
 router.post('/', async (req, res) => {
   try {
+    // Calculate the next ID based on the highest existing ID
+    const lastTask = await Task.findOne().sort({ _id: -1 });
+    const nextId = lastTask ? lastTask._id + 1 : 1;
+
     if (Array.isArray(req.body)) {
-      const newTasks = await Task.insertMany(req.body);
+      // Add numeric IDs to the array of tasks
+      const tasksWithIds = req.body.map((task, index) => ({
+        ...task,
+        _id: nextId + index
+      }));
+      const newTasks = await Task.insertMany(tasksWithIds);
       res.status(201).json(newTasks);
     } else {
       const newTask = new Task({
-        id: Task.length + 1,
+        _id: nextId,
         title: req.body.title,
         completed: req.body.completed || false
       });
@@ -61,6 +68,5 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Export both the router and the seed function
 module.exports = router;
 module.exports.seedDatabase = seedDatabase;
